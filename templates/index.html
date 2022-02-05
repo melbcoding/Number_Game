@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>It's the Number Game Y'all</title>
+</head>
+<body>
+    <div class="container center-align">
+        <div class="row">
+            <h5 class="z-depth-5">Welcome to the Great Number Game!</h5>
+        </div>
+        <div class="row">
+            <p>I am thinking of a number between 1 and 100</p>
+            {% if session['tries'] < 6 %}
+                {% if 'user_guess' in session %} 
+                    {%if session['user_guess'] == session['random']%}
+                        <div>
+                            <h3>You guessed it!</h3>
+                            <a href='/reset'>Play Again!</a>
+                        </div>
+                    {% elif session['user_guess'] < session['random'] %}
+                        <div>
+                            <h3>too low, guess again!</h3>
+                        </div>
+
+                    {% else %} 
+                    <div>
+                        <h3>two high, guess again!</h3>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            {% else %} 
+            <div>
+                <h3> you lose! </h3>
+                <p>the number was {{session['random']}}</p>
+                <a href='/reset'>Play Again!</a>
+            </div>
+            {% endif %}
+            
+            <form class="row" action="/guess" method="POST">
+                {{session['warning']|safe}}
+                <div class="input-field col s4 push-s4">
+                <input type="text" name="guess" value="0">
+                <label for="guess">Guess the number!</label>
+                <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                </button>            
+            </form>
+        {%if session['tries']%}
+            {%if session['tries'] > 0 %}
+            <p>you have {{6 - session['tries']}} more guesses!</p>
+            {%endif%}
+        {%endif%}
+        </div>
+    </div>
+</body>
+</html>
